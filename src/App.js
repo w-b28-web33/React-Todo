@@ -1,80 +1,85 @@
-import React from 'react';
-import TodoForm from './components/TodoForm';
-import Todo from './components/Todo';
-import TodoItem from './components/TodoItem';
+import React from "react";
 
-let tasks = [
-  {
-    task: "Organize Garage",
-    id: Date.now(),
-    completed: false
-  },
-  
+import TodoList from "./components/TodoList";
+import TodoForm from "./components/TodoForm";
+import {uuidv4 as uuid}from "uuidv4";
+import "./Todo.css";
+
+const todos = [
+  { 
+    task: "Organize Garage", 
+    id: uuid,
+    completed: false, 
+    },
   {
     task: "Bake Cookies",
-    id: Date.now(),
-    completed: false
-  }
+    id: uuid,
+    completed: false,
+  },
 ];
 
 class App extends React.Component {
-  // you will need a place to store your state in this component.
-  // design `App` to be the parent component of your application.
-  // this component is going to take care of state, and any change handlers 
-  // you need to work with your state
-      constructor(props) {
-        super(props)
-      
-        this.state = {tasks}
-      }
+  constructor() {
+    super();
     
-      addNewTask= task => {
-      
-        const newTask = { 
-          task: task,
-          id: Date.now(),
-          completed: false
-        };
-        
-        this.setState({
-        tasks: [...this.state.tasks, newTask]
-        })
-      }
-      
-      // toggle completed 
-      
-        markCompleted = id => {
-          this.setState({ tasks: this.state.tasks.map(task => {
-            if(task.id === id ){
-              task.completed = !task.completed
-            }
-            return task;
-          })})
+    this.state = {
+      todos: todos,
+    };
+  }
+
+  deleteCompleted = _ => {
+    this.setState({
+      todos: this.state.todos.filter((item) => {
+        return item.completed === false;
+      }),
+    });
+  };
+
+  toggleItem = (id) => {
+    this.setState({
+      todos: this.state.todos.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            completed: !item.completed,
+          };
+        } else {
+          return item;
         }
-        
-    
-      
-      
-      // delete a Task/Todo
-      
-      deleteTodo = id => {
-        this.setState({ tasks: [...this.state.tasks.filter(task => task.id !== id)] })
-      }
-    
-  
-      
-  
+      }),
+    });
+  };
+
+  addTodo = item => {
+    const newTodo = {
+      task: item,
+      id: uuid,
+      completed: false,
+    };
+
+    this.setState({
+      todos: [...this.state.todos, newTodo],
+    });
+  };
+
   render() {
     return (
-      <div className="container">
-        <h2>React Class Components Todo App!</h2>
-        
-        <TodoForm addTask={this.addNewTask} />
-        <Todo todos={this.state.tasks} toggleComplete={this.markCompleted} deleteTodo={this.deleteTodo} />
+      <div>
+        <div className="App">
+          <h2>Forsaken React Todo App with classes</h2>
+          <TodoList
+            todos={this.state.todos}
+            toggleItem={this.toggleItem}
+            deleteCompleted={this.deleteCompleted}
+          />
+          
+          <TodoForm 
+            addTodo={this.addTodo} 
+          />
+        </div>
       </div>
     );
   }
 }
-
 
 export default App;

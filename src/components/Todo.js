@@ -1,26 +1,17 @@
-import React, { Component } from 'react';
-import TodoItem from '../components/TodoItem';
-import PropTypes from 'prop-types';
+import React from "react";
 
- class Todo extends Component {
- 
-//  Add idividual Todos
 
-render() {
-    return (
-      this.props.todos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} markComplete={this.props.markCompleted}
-          delete={this.props.deleteTodo} />
-       ) 
-      )
-    );
-  }
-}
 
-Todo.propTypes = {
-  todos: PropTypes.array.isRequired 
+const Todo = props => {
+  return (
+    <div
+      onClick={() => props.toggleItem(props.item.id)}
+      
+      className={`item${props.item.completed ? " completed" : "none"}`}
+    >
+    
+      <p>{props.item.task}</p>
+    </div>
+  );
 };
-
-
 export default Todo;
-
